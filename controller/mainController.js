@@ -1,37 +1,39 @@
-const db = require("../database/db");
+const firebase = require("../database/db");
 const Maincomponent = require("../models/maincomponent");
-const firestore = db.firestore();
+const firestore = firebase.firestore();
 
 const getMainComponent = async (req, res, next) => {
   try {
-    const productInfo = await firestore.collection("Prodoct");
-    const productData = await productInfo.get();
+    // Create Product Ref
+    const productRef = await firestore.collection("Product");
+    const productData = await productRef.get();
 
     const productsInfoArray = [];
-    const userToken = [];
+    const uidArray = [];
 
     if (productData.empty) {
       res.status(404).send("No product record");
     } else {
       productData.forEach((doc) => {
         const mainComponent = new Maincomponent(
+          doc.id,
           doc.data().productName,
           doc.data().mainImage,
-          doc.data().smallImage,
+          doc.data().images,
           doc.data().description
         );
         productsInfoArray.push(mainComponent);
-        userToken.push(doc.data().userToken);
+        uidArray.push(doc.data().uid);
       });
 
       // add profile data (username, pic) to maincomponent
       for (i = 0; i < productsInfoArray.length; i++) {
         const profileInfo = await firestore
           .collection("Profile")
-          .doc(userToken[i]);
+          .doc(uidArray[i]);
         let profileData = await profileInfo.get();
-        productsInfoArray[i].username = profileData.data().username;
-        productsInfoArray[i].pic = profileData.data().pic;
+        productsInfoArray[i].username = profileData.data().displayName;
+        productsInfoArray[i].userImage = profileData.data().userImage;
       }
       res.send(productsInfoArray);
     }

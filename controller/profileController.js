@@ -7,7 +7,7 @@ const firestore = db.firestore();
 const addProfile = async (req, res, next) => {
   try {
     const data = req.body;
-    const uid = "some-uid";
+    const uid = req.body.uid;
 
     const imageUrl = await uploadProfile(req.file, uid);
     data.imageUser = imageUrl;

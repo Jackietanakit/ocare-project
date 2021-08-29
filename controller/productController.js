@@ -6,18 +6,16 @@ const firestore = db.firestore();
 const addProduct = async (req, res, next) => {
   try {
     if (!req.body || !req.files) {
-      res.status(404).send("file not found");
+      res.status(400).send("Data not complete");
     } else {
-      //demo uid
-      const uid = "some-uid";
+      // Using userId :/
+      const uid = req.body.uid;
       const data = req.body;
-      console.log(req.files);
       // Upload image and get Url
       const imagesUrl = await uploadProduct(req.files, uid, data);
-      console.log(imagesUrl);
       data.mainImage = imagesUrl.splice(0, 1);
       data.images = imagesUrl;
-
+      data.uid = uid;
       await firestore.collection("Product").doc().set(data);
 
       res.send("Product created");
