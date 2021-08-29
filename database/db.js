@@ -1,6 +1,7 @@
 const firebase = require("firebase");
 require("firebase/firestore");
 require("firebase/storage");
+
 require("dotenv").config();
 
 const db = firebase.initializeApp({
