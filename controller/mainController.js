@@ -4,7 +4,7 @@ const firestore = db.firestore();
 
 const getMainComponent = async (req, res, next) => {
   try {
-    const productInfo = await firestore.collection("productTest");
+    const productInfo = await firestore.collection("Prodoct");
     const productData = await productInfo.get();
 
     const productsInfoArray = [];
