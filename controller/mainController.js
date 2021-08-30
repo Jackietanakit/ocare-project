@@ -29,7 +29,7 @@ const getMainComponent = async (req, res) => {
     } else {
       productData.forEach((doc) => {
         const mainComponent = new Maincomponent(
-          doc.data().productId,
+          doc.id,
           doc.data().productName,
           doc.data().mainImage,
           doc.data().images,
