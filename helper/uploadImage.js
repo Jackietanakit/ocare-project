@@ -5,18 +5,23 @@ var storageRef = db.storage().ref();
 const uploadProduct = async (images, uid, body) => {
   const imagesUrl = [];
 
-  for (i = 0; i < images.length; i++) {
-    let image = images[i];
-    const fileName = `${uid}/${body.productName}/${image.originalname}`;
-    const arrayUrl = await uploadImage(image, fileName);
-    imagesUrl.push(arrayUrl);
+  for (const i in images) {
+    console.log(i);
+    if (images[i]) {
+      const image = images[i];
+      const fileName = `${uid}/${body.productName}/${Date.now()}`;
+      const arrayUrl = await uploadImage(image, fileName);
+      imagesUrl.push(arrayUrl);
+    } else {
+      imagesUrl.push(null);
+    }
   }
 
   return imagesUrl;
 };
 
 const uploadProfile = async (image, uid) => {
-  const fileName = `${uid}/profileImage/${image.originalname}`;
+  const fileName = `${uid}/profileImage/${Date.now()}`;
   return await uploadImage(image, fileName);
 };
 

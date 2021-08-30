@@ -1,7 +1,20 @@
 class Profile {
-  constructor(userId, displayName, firstName, lastName, tel, userImage) {
+  constructor(
+    email,
+    userId,
+    userToken,
+    userUid,
+    displayName,
+    firstName,
+    lastName,
+    tel,
+    userImage
+  ) {
     // uid ()
+    this.email = email;
     this.userId = userId;
+    this.userToken = userToken;
+    this.userUid = userUid;
     this.displayName = displayName;
     this.firstName = firstName;
     this.lastName = lastName;

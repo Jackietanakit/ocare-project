@@ -8,30 +8,30 @@ const {
   getUserUid,
 } = require("../helper/authHelper");
 
-const signUpApi = async (req, res, next) => {
+const signUpApi = async (req, res) => {
   try {
     const email = req.body.email;
     const password = req.body.password;
 
-    const signIn = await firebase
-      .auth()
-      .createUserWithEmailAndPassword(email, password);
+    await firebase.auth().createUserWithEmailAndPassword(email, password);
     // Signed in
     const uid = getUserUid();
-    // console.log(uid);
+
+    // encryptedUid for security
     const userUid = encryptedUid();
     console.log(userUid);
+
+    // generate JWT token
+    const userToken = await generateToken(userUid);
 
     // add user to database
     const userId = generateId();
     const userData = {
       email: email,
       userId: userId,
+      userToken: userToken,
       userUid: userUid,
     };
-
-    const userToken = await generateToken(userUid);
-    userData.userToken = userToken;
 
     await firestore.collection("Profile").doc(uid).set(userData);
     res.status(200).json({
@@ -43,7 +43,7 @@ const signUpApi = async (req, res, next) => {
   }
 };
 
-const loginApi = async (req, res, next) => {
+const loginApi = async (req, res) => {
   try {
     const email = req.body.email;
     const password = req.body.password;
@@ -55,7 +55,6 @@ const loginApi = async (req, res, next) => {
       });
     const user = firebase.auth().currentUser;
     const uid = user.uid;
-    console.log(uid);
 
     const profileRef = await firestore.collection("Profile").doc(uid);
     const profileData = await profileRef.get();
@@ -72,7 +71,7 @@ const loginApi = async (req, res, next) => {
   }
 };
 
-const logoutApi = async (req, res, next) => {
+const logoutApi = async (req, res) => {
   try {
     await firebase
       .auth()

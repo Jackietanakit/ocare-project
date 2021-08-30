@@ -3,50 +3,92 @@ const Product = require("../models/product");
 const { uploadProduct } = require("../helper/uploadImage");
 const firestore = db.firestore();
 
-const addProduct = async (req, res, next) => {
+const addProduct = async (req, res) => {
   try {
     if (!req.body || !req.files) {
       res.status(400).send("Data not complete");
     } else {
-      // Using userId :/
-      const uid = req.body.uid;
+      // Uid from Middleware
+      const uid = req.uid;
       const data = req.body;
+
       // Upload image and get Url
       const imagesUrl = await uploadProduct(req.files, uid, data);
+
+      // Add data to Object data
       data.mainImage = imagesUrl.splice(0, 1);
       data.images = imagesUrl;
       data.uid = uid;
-      await firestore.collection("Product").doc().set(data);
 
-      res.send("Product created");
+      // Upload text to firestore
+      await firestore.collection("Product").doc().set(data);
+      res.status(200).send("Product created");
     }
   } catch (error) {
     res.status(400).send(error.message);
   }
 };
 
-const getProduct = async (req, res, next) => {
+const getProduct = async (req, res) => {
   try {
     const id = req.params.id;
-    const product = await firestore.collection("Product").doc(id);
-    const data = await product.get();
+    const productRef = await firestore.collection("Product").doc(id);
+    const data = await productRef.get();
     if (!data.exists) {
       res.status(404).send("Product with the given ID not found");
     } else {
-      data.forEach((doc) => {
-        const product = new Product(
-          doc.id,
-          doc.data().productName,
-          doc.data().mainImage,
-          doc.data().images,
-          doc.data().description,
-          doc.data().price,
-          doc.data().category
-        );
-        res.send(product);
-      });
+      const product = new Product(
+        data.id,
+        data.data().productName,
+        data.data().mainImage,
+        data.data().images,
+        data.data().description,
+        data.data().price,
+        data.data().category
+      );
+      res.send(product);
     }
   } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
+
+// Still editing :(
+const editProduct = async (req, res) => {
+  try {
+    if (!req.body && !req.files) {
+      res.status(400).send("Nothing to change");
+    } else {
+      const data = req.body;
+      const uid = req.uid;
+      var productRef = firestore.collection("Product").doc(data.id);
+      if (req.files) {
+        const imagesUrl = await uploadProduct(req.files, uid);
+        data.mainImage = imagesUrl.splice(0, 1);
+        for (i in imagesUrl) {
+          if (imagesUrl[i]) {
+            await productRef.update({
+              images: firebase.firestore.i.arrayRemove(i),
+            });
+          }
+        }
+      }
+
+      for (const property in req.body) {
+        if (!data[property]) {
+          delete data[property];
+        }
+      }
+
+      // delete id before edit
+      delete data.id;
+      await firestore
+        .collection("Profile")
+        .doc(req.body.id)
+        .set(data, { merge: true });
+      res.status(200).send("Ok");
+    }
+  } catch {
     res.status(400).send(error.message);
   }
 };
@@ -54,4 +96,5 @@ const getProduct = async (req, res, next) => {
 module.exports = {
   addProduct,
   getProduct,
+  editProduct,
 };

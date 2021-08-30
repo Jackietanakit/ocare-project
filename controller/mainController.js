@@ -2,7 +2,7 @@ const firebase = require("../database/db");
 const Maincomponent = require("../models/maincomponent");
 const firestore = firebase.firestore();
 
-const getMainComponent = async (req, res, next) => {
+const getMainComponent = async (req, res) => {
   try {
     // Create Product Ref
     const productRef = await firestore.collection("Product");

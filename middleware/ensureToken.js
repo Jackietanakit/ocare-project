@@ -14,7 +14,7 @@ const ensureToken = async (req, res, next) => {
           res.status(403).send("Unauthorization");
         } else {
           const uid = decryptedUid(data);
-          req.body.uid = uid;
+          req.uid = uid;
           next();
         }
       });

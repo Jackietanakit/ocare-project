@@ -3,16 +3,16 @@ const Profile = require("../models/profile");
 const { uploadProfile } = require("../helper/uploadImage");
 const firestore = db.firestore();
 
-// happen instance when create account
-const addProfile = async (req, res, next) => {
+// happen after create account
+const addProfile = async (req, res) => {
   try {
     const data = req.body;
-    const uid = req.body.uid;
+    const uid = req.uid;
 
     const imageUrl = await uploadProfile(req.file, uid);
     data.imageUser = imageUrl;
 
-    await firestore.collection("Profile").doc(uid).set(data);
+    await firestore.collection("Profile").doc(uid).set(data, { merge: true });
     res.send("Profile updated");
   } catch (error) {
     res.status(400).send(error.message);
@@ -20,12 +20,34 @@ const addProfile = async (req, res, next) => {
 };
 
 // edit profile
-const editProfile = async (req, res, next) => {
-  const profile = new Profile();
-  db.collection("Profile").doc(req.body.productId);
+const editProfile = async (req, res) => {
+  try {
+    if (!req.body && !req.file) {
+      res.status(400).send("Nothing to change");
+    } else {
+      const data = req.body;
+      const uid = req.uid;
+
+      if (req.file) {
+        const imageUrl = await uploadProfile(req.file, uid);
+        data.imageUser = imageUrl;
+      }
+
+      for (const property in req.body) {
+        if (!data[property]) {
+          delete data[property];
+        }
+      }
+
+      await firestore.collection("Profile").doc(uid).set(data, { merge: true });
+      res.status(200).send("Ok");
+    }
+  } catch {
+    res.status(400).send(error.message);
+  }
 };
 
 module.exports = {
-  editProfile,
   addProfile,
+  editProfile,
 };
