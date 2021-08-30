@@ -16,9 +16,10 @@ const addProduct = async (req, res) => {
       const imagesUrl = await uploadProduct(req.files, uid, data);
 
       // Add data to Object data
-      data.mainImage = imagesUrl.splice(0, 1);
+      data.mainImage = imagesUrl.splice(0, 1)[0];
       data.images = imagesUrl;
       data.uid = uid;
+      data.time = Date.now()
 
       // Upload text to firestore
       await firestore.collection("Product").doc().set(data);
@@ -44,7 +45,7 @@ const getProduct = async (req, res) => {
         data.data().images,
         data.data().description,
         data.data().price,
-        data.data().category
+        data.data().category,
       );
       res.send(product);
     }

@@ -6,7 +6,8 @@ class Product {
     images,
     description,
     price,
-    category
+    category,
+    time
   ) {
     this.productId = productId;
     this.productName = productName;
@@ -15,6 +16,7 @@ class Product {
     this.description = description;
     this.price = price;
     this.category = category;
+    this.time = time;
   }
 }
 
