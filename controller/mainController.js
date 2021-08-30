@@ -4,9 +4,15 @@ const firestore = firebase.firestore();
 
 const getMainComponent = async (req, res) => {
   try {
-    // jackie
+    // store last document
+    let lastestDoc = null;
+
     // Create Product Ref
-    const productRef = await firestore.collection("Product");
+    const productRef = await firestore
+      .collection("Product")
+      .orderBy("time")
+      .limit(10)
+      .startAfter(lastestDoc || 0);
     const productData = await productRef.get();
 
     const productsInfoArray = [];
@@ -26,6 +32,9 @@ const getMainComponent = async (req, res) => {
         productsInfoArray.push(mainComponent);
         uidArray.push(doc.data().uid);
       });
+      // console.log(productsInfoArray);
+      lastestDoc = productData.docs[productData.docs.length - 1];
+      //console.log(lastestDoc);
 
       // add profile data (username, pic) to maincomponent
       for (i = 0; i < productsInfoArray.length; i++) {
@@ -39,6 +48,7 @@ const getMainComponent = async (req, res) => {
       res.send(productsInfoArray);
     }
   } catch (error) {
+    console.log(error);
     res.status(400).send(error.message);
   }
 };
