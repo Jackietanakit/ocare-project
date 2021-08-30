@@ -12,7 +12,7 @@ const getMainComponent = async (req, res) => {
     } else {
       lastestDoc = req.body.lastestDocTime;
     }
-    console.log(lastestDoc);
+    lastestDoc = parseInt(lastestDoc);
 
     // Create Product Ref
     const productRef = await firestore
