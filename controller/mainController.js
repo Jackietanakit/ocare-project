@@ -4,6 +4,7 @@ const firestore = firebase.firestore();
 
 const getMainComponent = async (req, res) => {
   try {
+    // jackie
     // Create Product Ref
     const productRef = await firestore.collection("Product");
     const productData = await productRef.get();
