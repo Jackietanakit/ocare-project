@@ -31,8 +31,9 @@ const getMainComponent = async (req, res) => {
         );
         productsInfoArray.push(mainComponent);
         uidArray.push(doc.data().uid);
+        console.log(productData);
       });
-      // console.log(productsInfoArray);
+      //console.log(productsInfoArray);
       lastestDoc = productData.docs[productData.docs.length - 1];
       //console.log(lastestDoc);
 
