@@ -6,7 +6,6 @@ const uploadProduct = async (images, uid, body) => {
   const imagesUrl = [];
 
   for (const i in images) {
-    console.log(i);
     if (images[i]) {
       const image = images[i];
       const fileName = `${uid}/${body.productName}/${Date.now()}`;
