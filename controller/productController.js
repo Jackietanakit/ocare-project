@@ -14,10 +14,11 @@ const addProduct = async (req, res) => {
 
       // Upload image and get Url
       const imagesUrl = await uploadProduct(req.files, uid, data);
+      console.log(imagesUrl)
 
       // Add data to Object data
-      data.mainImage = imagesUrl.splice(0, 1)[0];
-      data.images = imagesUrl;
+      data.mainImage = imagesUrl[0];
+      data.images = imagesUrl.splice(1);
       data.uid = uid;
       data.time = Date.now()
 
