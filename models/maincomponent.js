@@ -6,6 +6,7 @@ class Maincomponent {
     images,
     description,
     time,
+    category,
     displayName,
     userImage
   ) {
@@ -15,6 +16,7 @@ class Maincomponent {
     this.images = images;
     this.description = description;
     this.time = time;
+    this.category = category;
     this.displayName = displayName;
     this.userImage = userImage;
   }
