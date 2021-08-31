@@ -100,14 +100,12 @@ const checkUser = (req, res, next) => {
 };
 
 const forgetPassword = async (req, res) => {
-  console.log(req.body);
-  // try {
-  await firebase.auth().sendPasswordResetEmail(req.body.email);
-
-  res.status(200).send("Password reset email sent!");
-  // } catch {
-  //   res.status(404).send("Email not found");
-  // }
+  try {
+    await firebase.auth().sendPasswordResetEmail(req.body.email);
+    res.status(200).send("Password reset email sent!");
+  } catch {
+    res.status(404).send("Email not found");
+  }
 };
 
 module.exports = {
