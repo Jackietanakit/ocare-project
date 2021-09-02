@@ -9,8 +9,13 @@ const { ensureToken } = require("../middleware/ensureToken");
 
 const router = express.Router();
 
-router.post("/add", multer.array("images", 10), ensureToken, addProduct);
-router.post("/edit", multer.array("images", 10), ensureToken, editProduct);
+router.post("/add", multer.array("uploadImages", 10), ensureToken, addProduct);
+router.post(
+  "/edit",
+  multer.array("uploadImages", 10),
+  ensureToken,
+  editProduct
+);
 router.get("/:id", getProduct);
 
 module.exports = {

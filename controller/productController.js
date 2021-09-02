@@ -54,28 +54,45 @@ const getProduct = async (req, res) => {
   }
 };
 
-// Still editing :(
 const editProduct = async (req, res) => {
-  // import from middleware
-  const data = req.body;
-  const uid = req.uid;
+  try {
+    console.log(req.body);
+    // import from middleware
+    const data = req.body;
+    const uid = req.uid;
+    const images = data.images;
+    const docId = req.body.productId;
+    console.log(images);
 
-  // case when update main
-  if (data.mainImgChange == "true") {
-    const imagesUrl = await uploadProduct(req.files, uid, data);
-    if (imagesUrl.length >= 2) {
-      data.mainImage = imagesUrl[0];
-      const images = imagesUrl.splice(1);
-      for (i in images) {
-        data.images.push(images[i]);
+    // case when update main
+    if (data.mainImgChange == "true") {
+      const imagesUrl = await uploadProduct(req.files, uid, data);
+      if (imagesUrl.length >= 2) {
+        data.mainImage = imagesUrl[0];
+        const smallUrl = imagesUrl.splice(1);
+        for (i in smallUrl) {
+          images.push(smallUrl[i]);
+        }
+        console.log(images);
+        data.images = images;
+      } else {
+        // update only main images
+        data.mainImage = imagesUrl[0];
       }
     } else {
-      // update only main images
-      data.mainImage = imagesUrl[0];
+      const imagesUrl = await uploadProduct(req.files, uid, data);
+      for (i in imagesUrl) {
+        images.push(imagesUrl[i]);
+      }
+      data.images = images;
     }
-  } else {
-    const imagesUrl = await uploadProduct(req.files, uid, data);
-    data.images.push(imagesUrl);
+
+    delete data.mainImgChange;
+    delete data.productId;
+    await firestore.collection("Product").doc(docId).set(data, { merge: true });
+    res.status(200).send("Edit successfully");
+  } catch {
+    res.status(400).send(error.message);
   }
 };
 

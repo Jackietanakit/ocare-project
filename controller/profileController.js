@@ -33,12 +33,6 @@ const editProfile = async (req, res) => {
         data.imageUser = imageUrl;
       }
 
-      for (const property in req.body) {
-        if (!data[property]) {
-          delete data[property];
-        }
-      }
-
       await firestore.collection("Profile").doc(uid).set(data, { merge: true });
       res.status(200).send("Ok");
     }

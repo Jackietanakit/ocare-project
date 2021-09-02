@@ -9,11 +9,10 @@ const uploadProduct = async (images, uid, body) => {
     if (images[i]) {
       const image = images[i];
       const fileName = `${uid}/${body.productName}/${Date.now()}`;
-      const arrayUrl = await uploadImage(image, fileName);
-      imagesUrl.push(arrayUrl);
+      let singleUrl = await uploadImage(image, fileName);
+      imagesUrl.push(singleUrl);
     }
   }
-
   return imagesUrl;
 };
 
