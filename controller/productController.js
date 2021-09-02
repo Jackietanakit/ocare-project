@@ -56,58 +56,26 @@ const getProduct = async (req, res) => {
 
 // Still editing :(
 const editProduct = async (req, res) => {
-  if (!req.body && !req.files) {
-    res.status(400).send("Nothing to change");
+  // import from middleware
+  const data = req.body;
+  const uid = req.uid;
+
+  // case when update main
+  if (data.mainImgChange == "true") {
+    const imagesUrl = await uploadProduct(req.files, uid, data);
+    if (imagesUrl.length >= 2) {
+      data.mainImage = imagesUrl[0];
+      const images = imagesUrl.splice(1);
+      for (i in images) {
+        data.images.push(images[i]);
+      }
+    } else {
+      // update only main images
+      data.mainImage = imagesUrl[0];
+    }
   } else {
-    const data = req.body;
-    const images = req.files;
-    const uid = req.uid;
-
-    console.log(data);
-
-    var productRef = firestore.collection("Product").doc(data.id);
-
-    // delete images in Firebase
-    for (i in data.imagesDelete) {
-      await productRef.update({
-        images: firebase.firestore.FieldValue.arrayDelete(data.imagesDelete[i]),
-      });
-    }
-
-    if (data.mainImgExist == "true") {
-      const mainImageUrl = await uploadProduct(
-        images.splice(0, 1),
-        uid,
-        "edit"
-      );
-      data.mainImage = mainImageUrl;
-    }
-    const uploadImages = images;
-
-    // upload images to Firebase
-    if (uploadImages) {
-      const imagesUrl = await uploadProduct(uploadImages, uid, "edit");
-      console.log(imagesUrl);
-      for (i in imagesUrl) {
-        await productRef.update({
-          images: firebase.firestore.FieldValue.arrayUnion("Yay"),
-        });
-      }
-    }
-
-    for (const property in data) {
-      if (!data[property]) {
-        delete data[property];
-      }
-    }
-
-    // delete id before edit
-    delete data.mainImgExist;
-    delete data.id;
-    console.log(data);
-    // await productRef
-    //   .set(data, { merge: true });
-    res.status(200).send("Ok");
+    const imagesUrl = await uploadProduct(req.files, uid, data);
+    data.images.push(imagesUrl);
   }
 };
 

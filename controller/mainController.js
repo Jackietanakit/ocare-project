@@ -77,7 +77,7 @@ const getMainComponent = async (req, res) => {
             .doc(uidArray[i]);
           let profileData = await profileInfo.get();
           search[i].username = profileData.data().displayName;
-          search[i].userImage = profileData.data().userImage;
+          search[i].imageUser = profileData.data().imageUser;
           counter++;
         }
         const result = tripArray(index, counter, search);
@@ -90,7 +90,7 @@ const getMainComponent = async (req, res) => {
             .doc(uidArray[i]);
           let profileData = await profileInfo.get();
           productsInfoArray[i].username = profileData.data().displayName;
-          productsInfoArray[i].userImage = profileData.data().userImage;
+          productsInfoArray[i].imageUser = profileData.data().imageUser;
           counter++;
         }
         const result = tripArray(index, counter, productsInfoArray);

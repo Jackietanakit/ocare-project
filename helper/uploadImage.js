@@ -11,8 +11,6 @@ const uploadProduct = async (images, uid, body) => {
       const fileName = `${uid}/${body.productName}/${Date.now()}`;
       const arrayUrl = await uploadImage(image, fileName);
       imagesUrl.push(arrayUrl);
-    } else {
-      imagesUrl.push(null);
     }
   }
 

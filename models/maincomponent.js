@@ -8,7 +8,7 @@ class Maincomponent {
     time,
     category,
     displayName,
-    userImage
+    imageUser
   ) {
     this.productId = productId;
     this.productName = productName;
@@ -18,7 +18,7 @@ class Maincomponent {
     this.time = time;
     this.category = category;
     this.displayName = displayName;
-    this.userImage = userImage;
+    this.imageUser = imageUser;
   }
 }
 

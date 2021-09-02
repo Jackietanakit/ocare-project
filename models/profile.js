@@ -8,7 +8,7 @@ class Profile {
     firstName,
     lastName,
     tel,
-    userImage
+    imageUser
   ) {
     // uid ()
     this.email = email;
@@ -19,7 +19,7 @@ class Profile {
     this.firstName = firstName;
     this.lastName = lastName;
     this.tel = tel;
-    this.userImage = userImage;
+    this.imageUser = imageUser;
   }
 }
 
