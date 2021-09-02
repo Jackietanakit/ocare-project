@@ -9,22 +9,22 @@ const getMainComponent = async (req, res) => {
     let category = "";
     let index = null;
 
-    if (!req.params.lastestDocTime) {
+    if (!req.query.lastestDocTime) {
       lastestDoc = null;
     } else {
-      lastestDoc = parseInt(req.params.lastestDocTime);
+      lastestDoc = parseInt(req.query.lastestDocTime);
     }
 
-    if (!req.params.category) {
+    if (!req.query.category) {
       category = "";
     } else {
-      category = String(req.params.category);
+      category = String(req.query.category);
     }
 
-    if (!req.params.index) {
+    if (!req.query.index) {
       index = null;
     } else {
-      index = parseInt(req.params.index);
+      index = parseInt(req.query.index);
     }
 
     // Create Product Ref
