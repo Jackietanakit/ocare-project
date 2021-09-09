@@ -16,7 +16,7 @@ router.post(
   ensureToken,
   editProduct
 );
-router.get("/:id", getProduct);
+router.get("/", getProduct);
 
 module.exports = {
   routes: router,
