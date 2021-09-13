@@ -41,7 +41,32 @@ const editProfile = async (req, res) => {
   }
 };
 
+const getProfile = async (req, res) => {
+  try {
+    const uid = req.uid;
+    const productRef = await firestore.collection("Profile").doc(uid);
+    const data = await productRef.get();
+    if (!data.exists) {
+      res.status(404).send("Profile not found");
+    } else {
+      const profile = new Profile(
+        data.data().email,
+        data.data().userId,
+        data.data().userToken,
+        data.data().displayName,
+        data.data().firstName,
+        data.data().lastName,
+        data.data().imageUser
+      );
+      res.send(profile);
+    }
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
+
 module.exports = {
   addProfile,
   editProfile,
+  getProfile,
 };
