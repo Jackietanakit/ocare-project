@@ -55,6 +55,40 @@ const getProduct = async (req, res) => {
   }
 };
 
+const getMyProduct = async (req, res) => {
+  try {
+    const uid = String(req.uid);
+    const productsInfoArray = [];
+    await firestore
+      .collection("Product")
+      .where("uid", "==", uid)
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          const product = new Product(
+            doc.id,
+            doc.data().productName,
+            doc.data().mainImage,
+            doc.data().images,
+            doc.data().description,
+            doc.data().price,
+            doc.data().category,
+            doc.data().time
+          );
+          productsInfoArray.push(product);
+        });
+      });
+
+    if (!productsInfoArray.length || productsInfoArray == undefined) {
+      res.status(404).send("Product with the given User not found");
+    } else {
+      res.status(200).send(productsInfoArray);
+    }
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
+
 const editProduct = async (req, res) => {
   try {
     console.log(req.body);
@@ -100,5 +134,6 @@ const editProduct = async (req, res) => {
 module.exports = {
   addProduct,
   getProduct,
+  getMyProduct,
   editProduct,
 };

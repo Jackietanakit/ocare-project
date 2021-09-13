@@ -3,6 +3,7 @@ const multer = require("../middleware/multer");
 const {
   addProduct,
   getProduct,
+  getMyProduct,
   editProduct,
 } = require("../controller/productController");
 const { ensureToken } = require("../middleware/ensureToken");
@@ -17,6 +18,7 @@ router.post(
   editProduct
 );
 router.get("/", getProduct);
+router.get("/myProduct", ensureToken, getMyProduct);
 
 module.exports = {
   routes: router,

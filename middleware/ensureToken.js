@@ -10,7 +10,6 @@ const ensureToken = async (req, res, next) => {
 
       JWT.verify(req.token, "Wingadian", (err, data) => {
         if (err) {
-          console.log(req.token);
           res.status(403).send("Unauthorization");
         } else {
           const uid = decryptedUid(data);
