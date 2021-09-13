@@ -32,7 +32,7 @@ const addProduct = async (req, res) => {
 
 const getProduct = async (req, res) => {
   try {
-    const id = req.query.id;
+    const id = req.query.productId;
     console.log(id);
     const productRef = await firestore.collection("Product").doc(id);
     const data = await productRef.get();
