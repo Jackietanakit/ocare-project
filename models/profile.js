@@ -3,7 +3,6 @@ class Profile {
     email,
     userId,
     userToken,
-    userUid,
     displayName,
     firstName,
     lastName,
@@ -14,7 +13,6 @@ class Profile {
     this.email = email;
     this.userId = userId;
     this.userToken = userToken;
-    this.userUid = userUid;
     this.displayName = displayName;
     this.firstName = firstName;
     this.lastName = lastName;

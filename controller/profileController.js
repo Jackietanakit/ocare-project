@@ -56,6 +56,7 @@ const getProfile = async (req, res) => {
         data.data().displayName,
         data.data().firstName,
         data.data().lastName,
+        data.data().tel,
         data.data().imageUser
       );
       res.send(profile);
