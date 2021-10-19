@@ -51,7 +51,9 @@ const generateId = () => {
 
 const generateToken = async (userUid) => {
   try {
-    const token = await JWT.sign(userUid, "Wingadian");
+    data = { userUid: userUid };
+    const token = await JWT.sign(data, "Wingadian");
+    console.log("Token:" + token);
     return token;
   } catch (error) {
     console.log(error.message);

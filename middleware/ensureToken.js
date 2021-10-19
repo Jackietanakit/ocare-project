@@ -3,18 +3,18 @@ const crypto = require("crypto");
 
 const ensureToken = async (req, res, next) => {
   try {
-    const bearerHeader = req.headers["authorization"];
+    const bearerHeader = req.headers.authorization;
     if (typeof bearerHeader !== "undefined") {
       const bearerToken = bearerHeader.split(" ")[1];
       req.token = bearerToken;
 
       JWT.verify(req.token, "Wingadian", (err, data) => {
         if (err) {
-          res.status(403).send("Unauthorization");
+          res.status(403).send("Unauthorize");
         } else {
-          const uid = decryptedUid(data);
+          const uid = decryptedUid(data.userUid);
           req.uid = uid;
-          next();
+          res.status(200).send("logout");
         }
       });
     } else {
