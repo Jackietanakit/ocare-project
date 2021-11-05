@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json());
 app.use(
   cors({
-    origin: "https://ocare-marketplace-ffa5a.web.app/",
+    origin: "http://localhost:3000",
     credential: true,
   })
 );
